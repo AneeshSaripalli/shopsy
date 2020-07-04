@@ -10,17 +10,21 @@ services:
   #     - kafka
   #     - zookeeper
   zookeeper:
-    image: "bitnami/zookeeper:latest"
-    environment:
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - ALLOW_ANONYMOUS_LOGIN=yes
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
   kafka:
-    image: "bitnami/kafka:latest"
+    image: "wurstmeister/kafka:latest"
+    hostname: kafka
     environment:
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-    depends_on:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_CREATE_TOPICS=KafkaConnectivityTest:1:1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    links:
       - zookeeper
+    ports:
+      - "9092:9092"
   rust-kafka:
     build:
       context: rust
@@ -29,3 +33,5 @@ services:
       - kafka
     volumes:
       - ./rust/src:/app/src
+    links:
+      - kafka

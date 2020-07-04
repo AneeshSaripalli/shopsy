@@ -12,3 +12,4 @@ path = "src/main.rs"
 
 [dependencies]
 kafka = "0.8.0"
+cargo-watch = "7.4.1"
