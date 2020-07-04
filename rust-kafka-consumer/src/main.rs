@@ -10,6 +10,7 @@ fn main() {
 
     loop {
         for msg_set in consumer.poll().unwrap().iter() {
+            println!("Message in poll!");
             for m in msg_set.messages() {
                 println!("{:?}", m);
             }
@@ -21,5 +22,7 @@ fn main() {
         }
 
         let commit = consumer.commit_consumed();
+
+        println!("Looping");
     }
 }

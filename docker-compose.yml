@@ -1,14 +1,5 @@
 version: "3"
 services:
-  # go-service:
-  #   build:
-  #     context: go
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - kafka
-  #     - zookeeper
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
@@ -21,7 +12,7 @@ services:
       - KAFKA_CREATE_TOPICS=KafkaConnectivityTest:1:1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-    links:
+    depends_on:
       - zookeeper
     ports:
       - "9092:9092"
@@ -32,9 +23,7 @@ services:
     depends_on:
       - kafka
     volumes:
-      - ./rust/src:/app/src
-    links:
-      - kafka
+      - ./rust-kafka-producer/src:/app/src
   rust-kafka-consumer:
     build:
       context: rust-kafka-consumer
@@ -43,5 +32,12 @@ services:
       - kafka
     volumes:
       - ./rust-kafka-consumer/src:/app/src
-    links:
+  node-gateway:
+    build:
+      context: node-gateway
+      dockerfile: Dockerfile
+    depends_on:
       - kafka
+    volumes:
+      - ./node-gateway/src:/app/src
+      - ./node-gateway/node_modules:/app/node_modules
