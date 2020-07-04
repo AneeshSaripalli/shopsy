@@ -25,9 +25,9 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
-  rust-kafka:
+  rust-kafka-producer:
     build:
-      context: rust
+      context: rust-kafka-producer
       dockerfile: Dockerfile
     depends_on:
       - kafka
