@@ -35,3 +35,13 @@ services:
       - ./rust/src:/app/src
     links:
       - kafka
+  rust-kafka-consumer:
+    build:
+      context: rust-kafka-consumer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    volumes:
+      - ./rust-kafka-consumer/src:/app/src
+    links:
+      - kafka
