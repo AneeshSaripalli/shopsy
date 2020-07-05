@@ -1,23 +1,6 @@
-import kafka from "kafka-node";
+import app from "./express";
+import env from "./conf/env";
 
-const KafkaClient = new kafka.KafkaClient({
-    kafkaHost: "kafka:9092",
-    connectTimeout: 5000
-});
-const KafkaProducer = new kafka.Producer(KafkaClient);
-
-KafkaProducer.on('ready', () => {
-    console.log("Kafka Producer ready.")
-    KafkaProducer.send([{
-        topic: "KafkaConnectivityTest",
-        messages: [
-            "hello",
-            "world"
-        ]
-    }],
-        (error, data) => {
-            console.error(error)
-            console.log("Data", data)
-        })
-
+app.listen(env.SERVER_PORT, () => {
+    console.log("Server is listening");
 });
