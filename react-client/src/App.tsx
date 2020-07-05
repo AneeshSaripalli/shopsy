@@ -7,7 +7,7 @@ import Wasm from "react-wasm";
 function App() {
   return (
     <div className="App">
-      <Wasm url="/wasm/cargo_bg.wasm">
+      <Wasm url="/wasm/wasm_bg.wasm">
         {(info: any) => {
           if (info.loading) return "Loading...";
           if (info.error) return "An error has occurred";
