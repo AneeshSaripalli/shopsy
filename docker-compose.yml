@@ -57,6 +57,8 @@ services:
     build:
       context: react-client/wasm
       dockerfile: Dockerfile
+    volumes:
+      - ./react-client/wasm:/app/wasm
   nginx-gateway:
     restart: always
     depends_on:

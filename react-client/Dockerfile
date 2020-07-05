@@ -1,4 +1,11 @@
 FROM wasm-base
+WORKDIR /app/wasm
+
+COPY ./wasm ./
+
+RUN ls
+RUN source ~/.cargo/env && wasm-pack build --debug
+
 FROM node
 SHELL ["/bin/bash", "-c"] 
 WORKDIR /app

@@ -13,8 +13,3 @@ RUN ./rustup.sh -y
 RUN rm /app/wasm/rustup.sh
 
 RUN ~/.cargo/bin/cargo install wasm-pack
-
-COPY  . .
-
-RUN ls ~/.cargo/bin
-RUN source ~/.cargo/env && wasm-pack build
