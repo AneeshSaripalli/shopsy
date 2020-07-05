@@ -43,13 +43,14 @@ services:
       - ./node-gateway/node_modules:/app/node_modules
   react-client:
     stdin_open: true
+    image: react-client
     build:
       context: react-client
       dockerfile: Dockerfile
     volumes:
       - ./react-client/src:/app/src
       - ./react-client/node_modules:/app/node_modules
-      - ./react-client/wasm:/app/wasm
+      - ./react-client/wasm/src:/app/wasm/src
     depends_on:
       - wasm-base
   wasm-base:
@@ -58,7 +59,7 @@ services:
       context: react-client/wasm
       dockerfile: Dockerfile
     volumes:
-      - ./react-client/wasm:/app/wasm
+      - ./react-client/wasm/src:/app/wasm/src
   nginx-gateway:
     restart: always
     depends_on:

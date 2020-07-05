@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-FROM gcc:latest
+FROM node:latest
 SHELL ["/bin/bash", "-c"] 
 
 RUN apt-get update && \
@@ -13,3 +13,4 @@ RUN ./rustup.sh -y
 RUN rm /app/wasm/rustup.sh
 
 RUN ~/.cargo/bin/cargo install wasm-pack
+RUN ~/.cargo/bin/cargo install cargo-watch

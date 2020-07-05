@@ -1,21 +1,17 @@
 FROM wasm-base
-WORKDIR /app/wasm
-
-COPY ./wasm ./
-
-RUN ls
-RUN source ~/.cargo/env && wasm-pack build --debug
-
-FROM node
 SHELL ["/bin/bash", "-c"] 
 WORKDIR /app
 
-COPY package.json .
+ADD ./wasm/ ./wasm/
+
+ADD package.json .
 RUN npm update
 RUN NODE_ENV=development npm install
 
-COPY . .
+ADD src src
+ADD public/ public/
 
-COPY --from=0 /app/wasm/pkg /app/public/wasm
+ADD scripts/start.sh .
+RUN chmod +x ./start.sh
 
-CMD ["npm", "start"]
+ENTRYPOINT [ "./start.sh" ]
