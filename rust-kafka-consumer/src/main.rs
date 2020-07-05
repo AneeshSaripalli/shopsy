@@ -26,6 +26,6 @@ fn main() {
             }
         }
 
-        consumer.commit_consumed();
+        consumer.commit_consumed().unwrap();
     }
 }
