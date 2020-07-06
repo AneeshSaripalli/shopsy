@@ -15,6 +15,8 @@ const Home = () => {
     async function load() {
         const result = await import('wasm');
         sX(result.fib(10));
+
+        result.start_websocket();
     }
     load();
 
