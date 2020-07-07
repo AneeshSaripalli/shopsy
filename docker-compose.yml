@@ -1,9 +1,12 @@
 version: "3"
 services:
+  # zookeeper docker image for Kafka sync & mgmt
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+  # kafka docker image to set up single partition
+  #   - also creates KafkaConnectivityTest topic for testing SDK connections
   kafka:
     image: "wurstmeister/kafka:latest"
     hostname: kafka
@@ -16,6 +19,8 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+  # rust microservice to integrate with Kafka (producer)
+  #   - don't really know what it does yet
   rust-kafka-producer:
     build:
       context: rust-kafka-producer
@@ -24,6 +29,8 @@ services:
       - kafka
     volumes:
       - ./rust-kafka-producer/src:/app/src
+  # rust microservice to consume Kafka info
+  #   - might use this as the Email service
   rust-kafka-consumer:
     build:
       context: rust-kafka-consumer
@@ -32,15 +39,19 @@ services:
       - kafka
     volumes:
       - ./rust-kafka-consumer/src:/app/src
-  node-gateway:
+  # nodejs gateway for auth and message issuance
+  #   - need to architect what exactly this service does
+  gateway:
     build:
       context: node-gateway
       dockerfile: Dockerfile
+    hostname: gateway
     depends_on:
       - kafka
     volumes:
       - ./node-gateway/src:/app/src
       - ./node-gateway/node_modules:/app/node_modules
+  # react front end client & wasm modules
   react-client:
     stdin_open: true
     image: react-client
@@ -48,11 +59,15 @@ services:
       context: react-client
       dockerfile: Dockerfile
     volumes:
-      - ./react-client/src:/app/src
-      - ./react-client/node_modules:/app/node_modules
+      - ./react-client/javascript/src:/app/javascript/src
+      - ./react-client/javascript/node_modules:/app/javascript/node_modules
       - ./react-client/wasm/src:/app/wasm/src
+      - ./react-client/wasm-build:/app/wasm-build
     depends_on:
       - wasm-base
+      - protobufs
+  # wasm build base file
+  #   - image includes a Node + WASM build + run environment + live reload
   wasm-base:
     image: wasm-base
     build:
@@ -60,13 +75,23 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./react-client/wasm/src:/app/wasm/src
+  # gateway to proxy requests to both the client & node gateway
   nginx-gateway:
     restart: always
     depends_on:
       - react-client
-      - node-gateway
+      - gateway
     build:
       context: ./nginx-gateway
       dockerfile: Dockerfile
     ports:
       - "3000:80"
+
+  protobufs:
+    image: protobufs
+    build:
+      context: ./protos
+      dockerfile: Dockerfile
+    volumes:
+      - ./protos/build:/protos/build
+      - ./protos/node_modules:/protos/node_modules

@@ -1,17 +1,25 @@
+FROM protobufs
 FROM wasm-base
 SHELL ["/bin/bash", "-c"] 
 WORKDIR /app
 
-ADD ./wasm/ ./wasm/
+ADD javascript/package.json javascript/package.json 
+ADD javascript/tsconfig.json javascript/tsconfig.json 
 
-ADD package.json .
-RUN npm update
-RUN NODE_ENV=development npm install
+ADD wasm-build wasm-build
+COPY --from=protobufs /protos /protos
 
-ADD src src
-ADD public/ public/
+RUN cd javascript && npm update
+RUN cd javascript && NODE_ENV=development npm install
 
-ADD scripts/start.sh .
-RUN chmod +x ./start.sh
+ADD javascript/public javascript/public
+ADD javascript/src javascript/src
+
+ADD javascript/config-overrides.js javascript/config-overrides.js
+
+ADD javascript/scripts/start.sh .
+RUN chmod +x start.sh
+
+ADD wasm wasm
 
 ENTRYPOINT [ "./start.sh" ]

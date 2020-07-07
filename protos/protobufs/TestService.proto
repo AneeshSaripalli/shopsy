@@ -1,0 +1,16 @@
+syntax = "proto3";
+package api;
+
+message Person {
+    required string name = 1;
+    required int32 id = 2;
+    required string email = 3;
+}
+
+message TestRequest {
+    required int32 id = 1;
+}
+
+message TestResponse {
+    optional Person person = 1;
+}
