@@ -1,0 +1,27 @@
+{
+    "name": "protos",
+    "version": "1.0.0",
+    "description": "",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prebuild": "chmod +x scripts/BUILD",
+        "build": "npm run prebuild && scripts/BUILD",
+        "clean": "rm -rf build",
+        "deploy": "npm publish"
+    },
+    "keywords": [],
+    "license": "ISC",
+    "devDependencies": {
+        "protobufjs": "^6.9.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/aneeshsaripalli/shopsy.git"
+    },
+    "author": "Aneesh Saripalli",
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/@aneeshsaripalli"
+    }
+}
