@@ -58,6 +58,8 @@ services:
     build:
       context: react-client
       dockerfile: Dockerfile
+      args:
+        - GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
     volumes:
       - ./react-client/javascript/src:/app/javascript/src
       - ./react-client/javascript/node_modules:/app/javascript/node_modules
@@ -88,10 +90,11 @@ services:
       - "3000:80"
 
   protobufs:
-    image: protobufs
     build:
       context: ./protos
       dockerfile: Dockerfile
+      args:
+        - GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
     volumes:
       - ./protos/build:/protos/build
       - ./protos/node_modules:/protos/node_modules
