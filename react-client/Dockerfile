@@ -1,3 +1,4 @@
+FROM protobufs
 FROM wasm-base
 SHELL ["/bin/bash", "-c"] 
 WORKDIR /app
@@ -6,6 +7,8 @@ ADD javascript/package.json javascript/package.json
 ADD javascript/tsconfig.json javascript/tsconfig.json 
 
 ADD wasm-build wasm-build
+COPY --from=protobufs /protos /protos
+
 RUN cd javascript && npm update
 RUN cd javascript && NODE_ENV=development npm install
 

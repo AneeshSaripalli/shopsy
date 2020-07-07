@@ -65,6 +65,7 @@ services:
       - ./react-client/wasm-build:/app/wasm-build
     depends_on:
       - wasm-base
+      - protobufs
   # wasm build base file
   #   - image includes a Node + WASM build + run environment + live reload
   wasm-base:
@@ -85,3 +86,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:80"
+
+  protobufs:
+    image: protobufs
+    build:
+      context: ./protos
+      dockerfile: Dockerfile
+    volumes:
+      - ./protos/build:/protos/build
+      - ./protos/node_modules:/protos/node_modules

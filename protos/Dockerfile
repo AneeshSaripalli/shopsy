@@ -11,3 +11,5 @@ ADD protobufs protobufs
 ADD scripts scripts
 
 RUN npm run build
+
+CMD [ "npm", "run", "deploy" ]
