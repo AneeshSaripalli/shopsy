@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 import AppRouter from './router/AppRouter';
 
-import { api } from "protos";
+import { api } from "@aneeshsaripalli/protos";
 
 const x = api.Person.create({
     email: "aneeshsaripalli@gmail.com",

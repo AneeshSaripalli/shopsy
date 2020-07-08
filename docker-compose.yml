@@ -1,51 +1,42 @@
 version: "3"
 services:
-  # zookeeper docker image for Kafka sync & mgmt
-  zookeeper:
-    image: wurstmeister/zookeeper
-    ports:
-      - "2181:2181"
-  # kafka docker image to set up single partition
-  #   - also creates KafkaConnectivityTest topic for testing SDK connections
+  # kafka image
   kafka:
-    image: "wurstmeister/kafka:latest"
+    image: spotify/kafka
     hostname: kafka
-    environment:
-      - KAFKA_ADVERTISED_HOST_NAME=kafka
-      - KAFKA_CREATE_TOPICS=KafkaConnectivityTest:1:1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-    depends_on:
-      - zookeeper
     ports:
-      - "9092:9092"
-  # rust microservice to integrate with Kafka (producer)
-  #   - don't really know what it does yet
-  rust-kafka-producer:
-    build:
-      context: rust-kafka-producer
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    volumes:
-      - ./rust-kafka-producer/src:/app/src
-  # rust microservice to consume Kafka info
-  #   - might use this as the Email service
-  rust-kafka-consumer:
-    build:
-      context: rust-kafka-consumer
-      dockerfile: Dockerfile
-    depends_on:
-      - kafka
-    volumes:
-      - ./rust-kafka-consumer/src:/app/src
+      - 9092:9092
+      - 2181:2181
+  # # rust microservice to integrate with Kafka (producer)
+  # #   - don't really know what it does yet
+  # rust-kafka-producer:
+  #   build:
+  #     context: rust-kafka-producer
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - kafka
+  #   volumes:
+  #     - ./rust-kafka-producer/src:/app/src
+  # # rust microservice to consume Kafka info
+  # #   - might use this as the Email service
+  # rust-kafka-consumer:
+  #   build:
+  #     context: rust-kafka-consumer
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - kafka
+  #   volumes:
+  #     - ./rust-kafka-consumer/src:/app/src
   # nodejs gateway for auth and message issuance
   #   - need to architect what exactly this service does
-  gateway:
+  node-gateway:
+    restart: always
     build:
       context: node-gateway
       dockerfile: Dockerfile
-    hostname: gateway
+      args:
+        - GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
+    hostname: node-gateway
     depends_on:
       - kafka
     volumes:
@@ -82,7 +73,7 @@ services:
     restart: always
     depends_on:
       - react-client
-      - gateway
+      - node-gateway
     build:
       context: ./nginx-gateway
       dockerfile: Dockerfile
@@ -98,3 +89,4 @@ services:
     volumes:
       - ./protos/build:/protos/build
       - ./protos/node_modules:/protos/node_modules
+      - ./protos/package.json:/protos/package.json
