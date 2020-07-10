@@ -19,7 +19,7 @@ ADD javascript/src javascript/src
 
 ADD javascript/config-overrides.js javascript/config-overrides.js
 
-ADD javascript/scripts/start.sh .
+ADD javascript/docker_scripts/start.sh .
 RUN chmod +x start.sh
 
 ADD wasm wasm
