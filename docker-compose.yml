@@ -53,8 +53,7 @@ services:
         - GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
     volumes:
       - /app/javascript/node_modules
-      - ./react-client/javascript/src:/app/javascript/src
-      - ./react-client/javascript/public:/app/javascript/public
+      - ./react-client/javascript:/app/javascript
       - ./react-client/wasm/src:/app/wasm/src
       - ./react-client/wasm-build:/app/wasm-build
     depends_on:

@@ -1,8 +1,8 @@
-import React from 'react';
+import { makeStyles } from '@material-ui/core';
 import Grid from "@material-ui/core/Grid";
+import React from 'react';
 import "./Header.scss";
-import { Typography, makeStyles, } from '@material-ui/core';
-import { ReactComponent as Logo } from '../../../../../public/logo/logo.svg';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -18,7 +18,9 @@ const Header: React.FC<{}> = props => {
     return <nav id="header-nav">
         <Grid container justify="space-between" alignItems="stretch" className={classes.grid}>
             <Grid container item sm alignItems="center">
-                <Logo />
+                <Link to="/">
+                    <img height="50px" src="/logo/logo.svg" id="logo" />
+                </Link>
             </Grid>
         </Grid>
     </nav>

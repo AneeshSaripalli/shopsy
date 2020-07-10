@@ -14,10 +14,7 @@ ENV GITHUB_AUTH_TOKEN $GITHUB_AUTH_TOKEN
 RUN cd javascript && npm update
 RUN cd javascript && NODE_ENV=development npm install
 
-ADD javascript/public javascript/public
-ADD javascript/src javascript/src
-
-ADD javascript/config-overrides.js javascript/config-overrides.js
+ADD javascript javascript
 
 ADD javascript/docker_scripts/start.sh .
 RUN chmod +x start.sh

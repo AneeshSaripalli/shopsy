@@ -1,0 +1,27 @@
+.footer {
+    div {
+        overflow: hidden;
+        text-align: center;
+    }
+
+    div:before,
+    div:after {
+        background-color: #000;
+        content: "";
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    div:before {
+        right: 0.5em;
+        margin-left: -50%;
+    }
+
+    div:after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+}
