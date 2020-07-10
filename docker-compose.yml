@@ -40,8 +40,8 @@ services:
     depends_on:
       - kafka
     volumes:
+      - /app/node_modules
       - ./node-gateway/src:/app/src
-      - ./node-gateway/node_modules:/app/node_modules
   # react front end client & wasm modules
   react-client:
     stdin_open: true
@@ -52,8 +52,9 @@ services:
       args:
         - GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
     volumes:
+      - /app/javascript/node_modules
       - ./react-client/javascript/src:/app/javascript/src
-      - ./react-client/javascript/node_modules:/app/javascript/node_modules
+      - ./react-client/javascript/public:/app/javascript/public
       - ./react-client/wasm/src:/app/wasm/src
       - ./react-client/wasm-build:/app/wasm-build
     depends_on:

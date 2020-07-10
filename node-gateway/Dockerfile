@@ -19,7 +19,7 @@ ADD .npmrc .npmrc
 
 ADD package.json .
 ADD tsconfig.json .
-RUN NODE_ENV=development npm install
+RUN NODE_ENV=development npm update && NODE_ENV=development npm install
 
 ADD src src
 ADD .env .env
